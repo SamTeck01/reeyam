@@ -1,14 +1,16 @@
 export type Ratio = "4/5" | "3/4" | "1/1" | "16/10";
-export type Photo = { src?: string; alt: string; ratio: Ratio; caption?: string; label: string };
+export type Photo = { src?: string; video?: string; alt: string; ratio: Ratio; caption?: string; label: string };
 export type TimelineItem = { label: string; title: string; body: string; highlight?: boolean };
 export type Noticed = { title: string; body: string };
 export type Wish = { her: string; me: string };
 export type OrdinaryLine = { text: string; indent?: boolean; italic?: boolean; accent?: boolean };
 
 // Put files in public/photos and set src to e.g. "/photos/01.webp". Empty src shows a placeholder.
-const photo = (n: string, ratio: Ratio, caption?: string, src = ""): Photo => ({
+// Pass video: "/photos/NN.mp4" to show a muted looping clip (src is then its poster).
+const photo = (n: string, ratio: Ratio, caption?: string, src = "", video?: string): Photo => ({
   src,
-  alt: "[PLACEHOLDER: describe photo " + n + "]",
+  video,
+  alt: video ? "A short video of Reeyam" : "Reeyam",
   ratio,
   caption,
   label: `Photo ${n} · ${ratio.replace("/", ":")}`,
@@ -40,7 +42,7 @@ export const site = {
     line1: "Happy birthday,",
     line2: "Reeyam.",
     sub: "Today is about you.",
-    photo: photo("01", "4/5", "Reeyam — [PLACEHOLDER: where/when this was taken]"),
+    photo: photo("01", "4/5", "Reeyam", "/photos/01.webp"),
     scrollCue: "Take your time",
   },
 
@@ -111,14 +113,14 @@ export const site = {
   galleryHeading: { eyebrow: "Chapter four", title: "Pictures", italic: "" },
   // Order matters: 02 … 09 map to the editorial grid slots.
   gallery: [
-    photo("02", "4/5", "[PLACEHOLDER]"),
-    photo("03", "3/4"),
-    photo("04", "3/4", "[PLACEHOLDER]"),
-    photo("05", "1/1", "[PLACEHOLDER]"),
-    photo("06", "16/10", "[PLACEHOLDER]"),
-    photo("07", "4/5"),
-    photo("08", "4/5"),
-    photo("09", "3/4", "[PLACEHOLDER]"),
+    photo("02", "4/5", undefined, "/photos/02.webp"),
+    photo("03", "3/4", undefined, "/photos/03.webp", "/photos/03.mp4"),
+    photo("04", "3/4", undefined, "/photos/04.webp", "/photos/04.mp4"),
+    photo("05", "1/1", undefined, "/photos/05.webp"),
+    photo("06", "16/10", undefined, "/photos/06.webp"),
+    photo("07", "4/5", undefined, "/photos/07.webp", "/photos/07.mp4"),
+    photo("08", "4/5", undefined, "/photos/08.webp", "/photos/08.mp4"),
+    photo("09", "3/4", undefined, "/photos/09.webp"),
   ] satisfies Photo[],
 
   ordinary: {

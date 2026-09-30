@@ -34,7 +34,7 @@ export default function Gallery() {
         </div>
         <div className="my-5 [&_img]:max-h-[80vh] [&>figure>*:first-child]:max-h-[80vh]">
           <figure data-idx={4} className="cursor-zoom-in">
-            <Photo photo={g[4]} sizes="100vw" />
+            <Photo photo={g[4]} sizes="100vw" className="object-[50%_35%]" />
             {g[4].caption ? <figcaption className="eyebrow wrap mt-2 text-muted">{g[4].caption}</figcaption> : null}
           </figure>
         </div>

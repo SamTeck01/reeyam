@@ -33,7 +33,9 @@ export default function Viewer({ photos, children }: { photos: readonly Photo[];
         onTouchStart={(e: TouchEvent) => { x0.current = e.touches[0].clientX; }}
         onTouchEnd={(e: TouchEvent) => { const dx = e.changedTouches[0].clientX - x0.current; if (Math.abs(dx) > 40) { e.preventDefault(); step(dx < 0 ? 1 : -1); } }}
       >
-        {p?.src ? (
+        {p?.video ? (
+          <video key={p.video} src={p.video} controls autoPlay playsInline className="h-full w-full object-contain p-4" onClick={(e) => e.stopPropagation()} />
+        ) : p?.src ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={p.src} alt={p.alt} className="h-full w-full object-contain p-4" />
         ) : null}

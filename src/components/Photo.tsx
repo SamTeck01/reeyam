@@ -20,6 +20,22 @@ export default function Photo({ photo, sizes, priority, reveal = true, className
       </div>
     );
   }
+  if (photo.video) {
+    return (
+      <video
+        src={photo.video}
+        poster={photo.src}
+        aria-label={photo.alt}
+        muted
+        loop
+        autoPlay
+        playsInline
+        preload="none"
+        style={{ aspectRatio: photo.ratio }}
+        className={`object-cover ${cls}`}
+      />
+    );
+  }
   return (
     <Image
       src={photo.src}
