@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+/* Colours come from site.colors, injected as --c-* on <html> in layout.tsx */
+@theme {
+  --color-paper: var(--c-paper);
+  --color-paper-alt: var(--c-paperAlt);
+  --color-paper-deep: var(--c-paperDeep);
+  --color-slot: var(--c-photoSlot);
+  --color-ink: var(--c-ink);
+  --color-body: var(--c-inkBody);
+  --color-muted: var(--c-muted);
+  --color-rule: var(--c-rule);
+  --color-accent: var(--c-accent);
+  --color-night: var(--c-night);
+  --color-night-ink: var(--c-nightInk);
+  --color-night-accent: var(--c-nightAccent);
+  --color-card: var(--c-card);
+  --color-card-border: var(--c-cardBorder);
+  --font-serif: var(--font-newsreader), Georgia, serif;
+  --font-mono: var(--font-plex), ui-monospace, monospace;
+  --ease-book: cubic-bezier(.2, .7, .2, 1);
+}
+
+html { background: var(--c-paper); -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--c-paper);
+  color: var(--c-ink);
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+::selection { background: var(--c-accent); color: var(--c-paper); }
+:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 3px; border-radius: 2px; }
+
+/* ---------- component classes ---------- */
+.wrap { padding-inline: max(24px, env(safe-area-inset-left)) max(24px, env(safe-area-inset-right)); }
+@media (min-width: 760px) { .wrap { padding-inline: 48px; } }
+.band { padding-block: 112px; }
+.eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+.display { font-weight: 300; letter-spacing: -.03em; line-height: .96; }
+.chapter-title { font-size: clamp(38px, 11vw, 64px); }
+
+.photo-slot {
+  background-color: var(--c-photoSlot);
+  background-image: repeating-linear-gradient(135deg, transparent 0 14px, rgb(35 25 21 / .06) 14px 15px);
+}
+
+/* ---------- load animation (hero) ---------- */
+@keyframes fade-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@keyframes unveil { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0); } }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+.fu { animation: fade-up 1.4s var(--ease-book) both; }
+.unveil { animation: unveil 1.8s var(--ease-book) .6s both; }
+.bob { animation: bob 2.4s ease-in-out infinite; }
+
+/* ---------- scroll-driven ---------- */
+@keyframes rv { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+@keyframes rv-img { from { opacity: .3; clip-path: inset(12% 6%); } to { opacity: 1; clip-path: inset(0); } }
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+.progress { display: none; }
+@supports (animation-timeline: view()) {
+  .rv { animation: rv linear both; animation-timeline: view(); animation-range: entry 0% entry 45%; }
+  .rv-img { animation: rv-img linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
+  .progress {
+    display: block; transform-origin: 0 50%;
+    animation: grow linear both; animation-timeline: scroll(root);
+  }
+}
+
+/* ---------- accordion ---------- */
+.acc-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s var(--ease-book); }
+.acc-panel > div { overflow: hidden; }
+.acc-panel > div > * { opacity: 0; transform: translateY(-6px); transition: opacity .45s var(--ease-book), transform .45s var(--ease-book); }
+[aria-expanded="true"] + .acc-panel { grid-template-rows: 1fr; }
+[aria-expanded="true"] + .acc-panel > div > * { opacity: 1; transform: none; }
+.plus { transition: transform .45s var(--ease-book), background-color .3s, color .3s, border-color .3s; }
+[aria-expanded="true"] .plus { transform: rotate(45deg); background: var(--c-accent); border-color: var(--c-accent); color: var(--c-paper); }
+
+/* ---------- letter ---------- */
+.dropcap::first-letter {
+  float: left; font-style: italic; font-size: 4.2em; line-height: .82;
+  padding: .06em .1em 0 0; color: var(--c-nightAccent); font-weight: 300;
+}
+
+/* ---------- epilogue ---------- */
+@keyframes unfold { from { opacity: 0; transform: translateY(24px) scale(.98); } to { opacity: 1; transform: none; } }
+.unfold { animation: unfold 1s var(--ease-book) both; }
+.card-shadow { box-shadow: 0 1px 2px rgb(35 25 21 / .04), 0 24px 60px -20px rgb(35 25 21 / .22), 0 60px 120px -60px rgb(35 25 21 / .18); }
+
+.candle-stick {
+  width: 14px; height: 64px; border-radius: 2px 2px 1px 1px;
+  background: repeating-linear-gradient(135deg, #F3E3DC 0 7px, var(--c-accent) 7px 11px);
+}
+.wick { width: 2px; height: 9px; background: var(--c-ink); margin-inline: auto; border-radius: 1px; }
+.flame {
+  position: absolute; left: 50%; bottom: 100%; width: 14px; height: 26px; margin-left: -7px; margin-bottom: 5px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: radial-gradient(ellipse at 50% 70%, #FFF6DA 0 22%, #FFC45A 45%, #F27B1F 78%, transparent 80%);
+  box-shadow: 0 0 18px 6px rgb(255 196 90 / .35), 0 0 48px 18px rgb(255 170 60 / .15);
+  transform-origin: 50% 90%;
+  animation: flicker 1.6s ease-in-out infinite alternate;
+  transition: opacity .25s, transform .25s;
+}
+@keyframes flicker {
+  0% { transform: scale(1, 1) rotate(-1deg); }
+  35% { transform: scale(.94, 1.06) rotate(1.5deg); }
+  70% { transform: scale(1.03, .96) rotate(-.5deg); }
+  100% { transform: scale(.97, 1.04) rotate(1deg); }
+}
+.flame.out { opacity: 0; transform: scale(.2, .1); animation: none; }
+.smoke {
+  position: absolute; left: 50%; bottom: 100%; width: 3px; height: 40px; margin-left: -1.5px; margin-bottom: 6px;
+  background: linear-gradient(to top, rgb(120 110 100 / .5), transparent);
+  border-radius: 2px; filter: blur(1.5px);
+  animation: smoke 2.2s ease-out forwards;
+}
+@keyframes smoke {
+  from { opacity: .9; transform: translateY(0) scaleY(.4); }
+  to { opacity: 0; transform: translateY(-46px) translateX(6px) scaleY(1.4) rotate(8deg); }
+}
+
+dialog.viewer::backdrop { background: rgb(28 21 18 / .94); }
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .progress { display: none; }
+}
